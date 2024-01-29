@@ -3,35 +3,28 @@ import styled from "styled-components";
 const Wrapper = styled.div`
   display: flex;
 `;
-const BoxOne = styled.div`
-  background-color: teal;
+const Box = styled.div`
+  background-color: ${(props) => props.bgColor};
   width: 100px;
   height: 100px;
 `;
-const BoxTwo = styled.div`
-  background-color: tomato;
-  width: 100px;
-  height: 100px;
+const Circle = styled(Box)`
+  border-radius: 50px;
 `;
-const Text = styled.span`
-  color: #fff;
-`;
+// const Circle = styled.div`
+//   background-color: ${(props) => props.bgColor};
+//   width: 100px;
+//   height: 100px;
+//   border-radius: 50px;
+// `;
 
 function App() {
   return (
     <Wrapper>
-      <BoxOne>
-        <Text>Hello !</Text>
-      </BoxOne>
-      <BoxTwo />
+      <Box bgColor="teal" />
+      <Box bgColor="tomato" />
+      <Circle bgColor="skyblue" />
     </Wrapper>
-
-    // <div style={{display: "flex"}}>
-    //   <div style={{ backgroundColor: "teal", width: 100, height: 100 }}>
-    //      <span style={{ color: "#fff" }}>Hello !</span>
-    //   </div>
-    //   <div style={{ backgroundColor: "tomato", width: 100, height: 100 }}></div>
-    // </div>
   );
 }
 
