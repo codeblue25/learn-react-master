@@ -22,6 +22,10 @@ const rotateAnimation = keyframes`
   }
 `;
 
+const Emoji = styled.span`
+  font-size: 36px;
+`;
+
 const Box = styled.div`
   display: flex;
   justify-content: center;
@@ -30,9 +34,7 @@ const Box = styled.div`
   height: 200px;
   background-color: tomato;
   animation: ${rotateAnimation} 1s linear infinite;
-  span {
-    font-size: 36px;
-
+  ${Emoji} {
     &:hover {
       font-size: 48px;
     }
@@ -46,7 +48,7 @@ function App() {
   return (
     <Wrapper>
       <Box>
-        <span>😇</span>
+        <Emoji>😇</Emoji>
       </Box>
     </Wrapper>
   );
