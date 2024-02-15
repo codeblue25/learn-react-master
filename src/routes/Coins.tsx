@@ -37,15 +37,22 @@ const Coin = styled.li`
   border-radius: 15px;
   margin-bottom: 10px;
   a {
+    display: flex;
+    align-items: center;
     padding: 20px;
     transition: color 0.1s ease-in;
-    display: block;
   }
   &:hover {
     a {
       color: ${(props) => props.theme.accentColor};
     }
   }
+`;
+
+const SymbolImg = styled.img`
+  width: 25px;
+  height: 25px;
+  margin-right: 8px;
 `;
 
 const Title = styled.h1`
@@ -56,9 +63,13 @@ const Title = styled.h1`
 function Coins() {
   const [coins, setCoins] = useState<CoinInterface[]>([]);
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     (async () => {
-      const response = await fetch("https://api.coinpaprika.com/v1/coins");
+      const response = await fetch(
+        // "https://api.coinpaprika.com/v1/coins"
+        "https://proxy.cors.sh/https://api.coinpaprika.com/v1/coins"
+      );
       const json = await response.json();
       setCoins(json.slice(0, 100));
       setLoading(false);
@@ -77,7 +88,18 @@ function Coins() {
         <CoinList>
           {coins.map((coin) => (
             <Coin key={coin.id}>
-              <Link to={`/${coin.id}`}>{coin.name} &rarr;</Link>
+              <Link
+                to={{
+                  pathname: `/${coin.id}`,
+                  state: { name: coin.name },
+                }}
+              >
+                <SymbolImg
+                  alt="대표 이미지"
+                  src={`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLocaleLowerCase()}`}
+                />
+                {coin.name} &rarr;
+              </Link>
             </Coin>
           ))}
         </CoinList>
