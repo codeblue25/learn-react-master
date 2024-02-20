@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import React, { useEffect, useState } from "react";
+import { useQuery } from "react-query";
+import { fetchCoins } from "../api";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -61,20 +63,20 @@ const Title = styled.h1`
 `;
 
 function Coins() {
-  const [coins, setCoins] = useState<CoinInterface[]>([]);
+  const { isLoading, data } = useQuery<CoinInterface[]>("allCoins", fetchCoins);
+  /* const [coins, setCoins] = useState<CoinInterface[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
       const response = await fetch(
-        // "https://api.coinpaprika.com/v1/coins"
-        "https://proxy.cors.sh/https://api.coinpaprika.com/v1/coins"
+        "https://api.coinpaprika.com/v1/coins"
       );
       const json = await response.json();
       setCoins(json.slice(0, 100));
       setLoading(false);
     })();
-  });
+  }); */
 
   return (
     <Container>
@@ -82,11 +84,11 @@ function Coins() {
         <Title>Coins</Title>
       </Header>
 
-      {loading ? (
+      {isLoading ? (
         <Loader>Loading .. </Loader>
       ) : (
         <CoinList>
-          {coins.map((coin) => (
+          {data?.slice(0, 100).map((coin) => (
             <Coin key={coin.id}>
               <Link
                 to={{
