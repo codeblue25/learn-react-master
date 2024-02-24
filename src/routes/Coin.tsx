@@ -70,8 +70,8 @@ const Tab = styled.span<{ isActive: boolean }>`
   padding: 7px 0px;
   border-radius: 10px;
   color: ${(props) =>
-      props.isActive ? props.theme.accentColor : props.theme.textColor}
-    a {
+    props.isActive ? props.theme.accentColor : props.theme.textColor};
+  a {
     display: block;
   }
 `;
@@ -227,7 +227,7 @@ function Coin() {
               <Price />
             </Route>
             <Route path={`/:coinId/chart`}>
-              <Chart />
+              <Chart coinId={coinId} />
             </Route>
           </Switch>
         </>
