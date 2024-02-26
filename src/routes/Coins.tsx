@@ -64,7 +64,11 @@ const Title = styled.h1`
   color: ${(props) => props.theme.accentColor};
 `;
 
-function Coins() {
+interface ICoinsProps {
+  toggleTheme: () => void;
+}
+
+function Coins({ toggleTheme }: ICoinsProps) {
   const { isLoading, data } = useQuery<CoinInterface[]>("allCoins", fetchCoins);
   /* const [coins, setCoins] = useState<CoinInterface[]>([]);
   const [loading, setLoading] = useState(true);
@@ -87,6 +91,7 @@ function Coins() {
       </Helmet>
       <Header>
         <Title>Coins</Title>
+        <button onClick={toggleTheme}>Toggle Mode</button>
       </Header>
 
       {isLoading ? (
