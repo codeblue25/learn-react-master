@@ -35,10 +35,11 @@ interface CoinInterface {
 }
 
 const Coin = styled.li`
-  background-color: #fff;
-  color: ${(props) => props.theme.backgroundColor};
+  background-color: ${(props) => props.theme.cardBgColor};
+  color: ${(props) => props.theme.textColor};
   border-radius: 15px;
   margin-bottom: 10px;
+  border: 1px solid white;
   a {
     display: flex;
     align-items: center;
