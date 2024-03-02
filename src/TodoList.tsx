@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 interface IForm {
   password: string;
   passwordConfirm: string;
+  extraError: string;
 }
 
 function ToDoList() {
@@ -12,6 +13,7 @@ function ToDoList() {
     formState: { errors },
     setError,
   } = useForm<IForm>({});
+
   const onValid = (data: IForm) => {
     if (data.password !== data.passwordConfirm) {
       setError(
@@ -20,6 +22,8 @@ function ToDoList() {
         { shouldFocus: true }
       );
     }
+
+    setError("extraError", { message: "Server offline" });
   };
   return (
     <div>
@@ -28,8 +32,14 @@ function ToDoList() {
           {...register("password", {
             required: "Password is required",
             minLength: {
-              value: 5,
+              value: 2,
               message: "Password should be longer",
+            },
+            validate: {
+              no123: (value) =>
+                value.includes("123") ? "123 is not allowed" : true,
+              noAbc: (value) =>
+                value.includes("abc") ? "'abc' is not allowed" : true,
             },
           })}
           type="text"
@@ -46,6 +56,8 @@ function ToDoList() {
         <span>{errors?.passwordConfirm?.message}</span>
 
         <button>Submit</button>
+
+        <span>{errors?.extraError?.message}</span>
       </form>
     </div>
   );
