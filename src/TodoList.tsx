@@ -1,33 +1,54 @@
 import { useForm } from "react-hook-form";
 
-function TodoList() {
+interface IForm {
+  password: string;
+  passwordConfirm: string;
+}
+
+function ToDoList() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
-  const onValid = (data: any) => {
-    console.log(data);
+    setError,
+  } = useForm<IForm>({});
+  const onValid = (data: IForm) => {
+    if (data.password !== data.passwordConfirm) {
+      setError(
+        "passwordConfirm",
+        { message: "Password is not the same" },
+        { shouldFocus: true }
+      );
+    }
   };
-
   return (
     <div>
       <form onSubmit={handleSubmit(onValid)}>
         <input
-          {...register("todo", {
+          {...register("password", {
+            required: "Password is required",
             minLength: {
-              value: 10,
-              message: "Todo should be longer",
+              value: 5,
+              message: "Password should be longer",
             },
           })}
           type="text"
-          placeholder="Write your todo"
+          placeholder="Write your password"
         />
-        <button>Add</button>
-        <span>{errors.todo?.message as string}</span>
+        <span>{errors?.password?.message}</span>
+
+        <input
+          {...register("passwordConfirm", {
+            required: "Password confirm is required",
+          })}
+          placeholder="Write your password confirm"
+        />
+        <span>{errors?.passwordConfirm?.message}</span>
+
+        <button>Submit</button>
       </form>
     </div>
   );
 }
 
-export default TodoList;
+export default ToDoList;
