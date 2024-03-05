@@ -1,20 +1,29 @@
 import { IToDo } from "../atoms";
 
 function Todo({ text, category }: IToDo) {
-  const onClick = (selectedCategory: IToDo["category"]) => {
-    console.log(selectedCategory);
+  const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const {
+      currentTarget: { name },
+    } = event;
+    console.log(name);
   };
   return (
     <li>
       <span>{text}</span>
-      {category !== "DOING" && (
-        <button onClick={() => onClick("DOING")}>DOING</button>
-      )}
       {category !== "TO_DO" && (
-        <button onClick={() => onClick("TO_DO")}>TO_DO</button>
+        <button name="TO_DO" onClick={onClick}>
+          TO_DO
+        </button>
+      )}
+      {category !== "DOING" && (
+        <button name="DOING" onClick={onClick}>
+          DOING
+        </button>
       )}
       {category !== "DONE" && (
-        <button onClick={() => onClick("DONE")}>DONE</button>
+        <button name="DONE" onClick={onClick}>
+          DONE
+        </button>
       )}
     </li>
   );
