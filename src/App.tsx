@@ -6,13 +6,23 @@ function App() {
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="one">
-        {() => (
-          <ul>
+        {(magic) => (
+          <ul ref={magic.innerRef} {...magic.droppableProps}>
             <Draggable draggableId="first" index={0}>
-              {() => <li>Hello</li>}
+              {(magic) => (
+                <li ref={magic.innerRef} {...magic.draggableProps}>
+                  <span {...magic.dragHandleProps}>💞</span>
+                  Hello
+                </li>
+              )}
             </Draggable>
             <Draggable draggableId="second" index={1}>
-              {() => <li>World</li>}
+              {(magic) => (
+                <li ref={magic.innerRef} {...magic.draggableProps}>
+                  <span {...magic.dragHandleProps}>💞</span>
+                  World
+                </li>
+              )}
             </Draggable>
           </ul>
         )}
