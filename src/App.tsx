@@ -41,6 +41,21 @@ function App() {
         };
       });
     }
+    if (destination?.droppableId !== source.droppableId) {
+      // Move to other board
+      setTodoArr((allBoards) => {
+        const tempSourceBoard = [...allBoards[source.droppableId]];
+        const tempDestinationBoard = [...allBoards[destination.droppableId]];
+        tempSourceBoard.splice(source.index, 1);
+        tempDestinationBoard.splice(destination?.index, 0, draggableId);
+
+        return {
+          ...allBoards,
+          [source.droppableId]: tempSourceBoard,
+          [destination.droppableId]: tempDestinationBoard,
+        };
+      });
+    }
   };
 
   return (
