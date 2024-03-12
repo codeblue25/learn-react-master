@@ -1,5 +1,12 @@
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from "react-beautiful-dnd";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
+import { todoState } from "./atoms";
 
 const Wrapper = styled.div`
   display: flex;
@@ -31,10 +38,23 @@ const Card = styled.div`
   background-color: ${(props) => props.theme.cardColor};
 `;
 
-const todoArr = ["hello", "world", "this", "is", "spring"];
-
 function App() {
-  const onDragEnd = () => {};
+  const [todoArr, setTodoArr] = useRecoilState(todoState);
+  const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
+    console.log("from", source);
+    console.log("to", destination);
+
+    if (!destination) return;
+    setTodoArr((selectedTodoArr) => {
+      const tempTodoArr = [...selectedTodoArr];
+      // 1) Delete item on the source.index
+      tempTodoArr.splice(source.index, 1);
+      // 2) Add item on the destination.index
+      tempTodoArr.splice(destination?.index, 0, draggableId);
+
+      return tempTodoArr;
+    });
+  };
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
