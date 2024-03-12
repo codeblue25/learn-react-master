@@ -23,17 +23,24 @@ const Boards = styled.div`
 
 function App() {
   const [todoArr, setTodoArr] = useRecoilState(todoState);
-  const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
-    if (!destination) return;
-    /*     setTodoArr((selectedTodoArr) => {
-      const tempTodoArr = [...selectedTodoArr];
-      // 1) Delete item on the source.index
-      tempTodoArr.splice(source.index, 1);
-      // 2) Add item on the destination.index
-      tempTodoArr.splice(destination?.index, 0, draggableId);
+  const onDragEnd = (info: DropResult) => {
+    console.log(info);
+    const { destination, draggableId, source } = info;
 
-      return tempTodoArr;
-    }); */
+    if (!destination) return;
+    if (destination?.droppableId === source.droppableId) {
+      // Move in same board
+      setTodoArr((allBoards) => {
+        const tempBoard = [...allBoards[source.droppableId]];
+        tempBoard.splice(source.index, 1);
+        tempBoard.splice(destination?.index, 0, draggableId);
+
+        return {
+          ...allBoards,
+          [source.droppableId]: tempBoard,
+        };
+      });
+    }
   };
 
   return (
