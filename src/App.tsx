@@ -30,9 +30,6 @@ const Board = styled.div`
 function App() {
   const [todoArr, setTodoArr] = useRecoilState(todoState);
   const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
-    console.log("from", source);
-    console.log("to", destination);
-
     if (!destination) return;
     setTodoArr((selectedTodoArr) => {
       const tempTodoArr = [...selectedTodoArr];
