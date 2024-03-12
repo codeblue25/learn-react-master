@@ -1,14 +1,14 @@
-import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { todoState } from "./atoms";
-import DraggableCard from "./components/DragabbleCard";
+import Board from "./components/Board";
 
 const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 480px;
+  max-width: 920px;
   width: 100%;
   height: 100vh;
   margin: 0 auto;
@@ -17,21 +17,15 @@ const Wrapper = styled.div`
 const Boards = styled.div`
   display: grid;
   width: 100%;
-  grid-template-columns: repeat(1, 1fr);
-`;
-
-const Board = styled.div`
-  min-height: 200px;
-  padding: 30px 10px 20px 10px;
-  border-radius: 4px;
-  background-color: ${(props) => props.theme.boardColor};
+  gap: 10px;
+  grid-template-columns: repeat(3, 1fr);
 `;
 
 function App() {
   const [todoArr, setTodoArr] = useRecoilState(todoState);
   const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
     if (!destination) return;
-    setTodoArr((selectedTodoArr) => {
+    /*     setTodoArr((selectedTodoArr) => {
       const tempTodoArr = [...selectedTodoArr];
       // 1) Delete item on the source.index
       tempTodoArr.splice(source.index, 1);
@@ -39,23 +33,16 @@ function App() {
       tempTodoArr.splice(destination?.index, 0, draggableId);
 
       return tempTodoArr;
-    });
+    }); */
   };
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Wrapper>
         <Boards>
-          <Droppable droppableId="one">
-            {(magic) => (
-              <Board ref={magic.innerRef} {...magic.droppableProps}>
-                {todoArr.map((todo, index) => (
-                  <DraggableCard key={todo} todo={todo} index={index} />
-                ))}
-                {magic.placeholder}
-              </Board>
-            )}
-          </Droppable>
+          {Object.keys(todoArr).map((boardId) => (
+            <Board key={boardId} boardId={boardId} todoArr={todoArr[boardId]} />
+          ))}
         </Boards>
       </Wrapper>
     </DragDropContext>
