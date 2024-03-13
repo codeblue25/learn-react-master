@@ -32,8 +32,10 @@ function App() {
       // Move in same board
       setTodoArr((allBoards) => {
         const tempBoard = [...allBoards[source.droppableId]];
+        const taskObj = tempBoard[source.index]; // item object I move
+
         tempBoard.splice(source.index, 1);
-        tempBoard.splice(destination?.index, 0, draggableId);
+        tempBoard.splice(destination?.index, 0, taskObj);
 
         return {
           ...allBoards,
@@ -45,9 +47,11 @@ function App() {
       // Move to other board
       setTodoArr((allBoards) => {
         const tempSourceBoard = [...allBoards[source.droppableId]];
+        const taskObj = tempSourceBoard[source.index]; // item object I move
+
         const tempDestinationBoard = [...allBoards[destination.droppableId]];
         tempSourceBoard.splice(source.index, 1);
-        tempDestinationBoard.splice(destination?.index, 0, draggableId);
+        tempDestinationBoard.splice(destination?.index, 0, taskObj);
 
         return {
           ...allBoards,

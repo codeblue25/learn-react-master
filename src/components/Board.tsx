@@ -1,6 +1,9 @@
 import { Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import DragabbleCard from "./DragabbleCard";
+import { useRef } from "react";
+import { useForm } from "react-hook-form";
+import { ITodo } from "../atoms";
 
 const Wrapper = styled.div`
   width: 300px;
@@ -37,7 +40,7 @@ const Area = styled.div<IAreaProps>`
 `;
 
 interface IBoardProps {
-  todoArr: string[];
+  todoArr: ITodo[];
   boardId: string;
 }
 
@@ -54,7 +57,12 @@ function Board({ todoArr, boardId }: IBoardProps) {
             {...magic.droppableProps}
           >
             {todoArr.map((todo, index) => (
-              <DragabbleCard key={todo} todo={todo} index={index} />
+              <DragabbleCard
+                key={todo.id}
+                todoId={todo.id}
+                todoText={todo.text}
+                index={index}
+              />
             ))}
             {magic.placeholder}
           </Area>
