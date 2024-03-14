@@ -1,77 +1,26 @@
-import { DragDropContext, DropResult } from "react-beautiful-dnd";
-import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import { todoState } from "./atoms";
-import Board from "./components/Board";
 
 const Wrapper = styled.div`
+  width: 100vw;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 920px;
-  width: 100%;
-  height: 100vh;
-  margin: 0 auto;
 `;
 
-const Boards = styled.div`
-  display: grid;
-  width: 100%;
-  gap: 10px;
-  grid-template-columns: repeat(3, 1fr);
+const Box = styled.div`
+  width: 200px;
+  height: 200px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2), 0 10px 20px rgba(0, 0, 0, 0.06);
 `;
 
 function App() {
-  const [todoArr, setTodoArr] = useRecoilState(todoState);
-  const onDragEnd = (info: DropResult) => {
-    console.log(info);
-    const { destination, draggableId, source } = info;
-
-    if (!destination) return;
-    if (destination?.droppableId === source.droppableId) {
-      // Move in same board
-      setTodoArr((allBoards) => {
-        const tempBoard = [...allBoards[source.droppableId]];
-        const taskObj = tempBoard[source.index]; // item object I move
-
-        tempBoard.splice(source.index, 1);
-        tempBoard.splice(destination?.index, 0, taskObj);
-
-        return {
-          ...allBoards,
-          [source.droppableId]: tempBoard,
-        };
-      });
-    }
-    if (destination?.droppableId !== source.droppableId) {
-      // Move to other board
-      setTodoArr((allBoards) => {
-        const tempSourceBoard = [...allBoards[source.droppableId]];
-        const taskObj = tempSourceBoard[source.index]; // item object I move
-
-        const tempDestinationBoard = [...allBoards[destination.droppableId]];
-        tempSourceBoard.splice(source.index, 1);
-        tempDestinationBoard.splice(destination?.index, 0, taskObj);
-
-        return {
-          ...allBoards,
-          [source.droppableId]: tempSourceBoard,
-          [destination.droppableId]: tempDestinationBoard,
-        };
-      });
-    }
-  };
-
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <Wrapper>
-        <Boards>
-          {Object.keys(todoArr).map((boardId) => (
-            <Board key={boardId} boardId={boardId} todoArr={todoArr[boardId]} />
-          ))}
-        </Boards>
-      </Wrapper>
-    </DragDropContext>
+    <Wrapper>
+      <Box />
+    </Wrapper>
   );
 }
 
