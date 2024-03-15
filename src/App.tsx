@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { motion } from "framer-motion";
-import { useRef } from "react";
+import { motion, useMotionValue, useTransform } from "framer-motion";
+import { useEffect } from "react";
 
 const Wrapper = styled.div`
   width: 100vw;
@@ -8,17 +8,6 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-
-const BoxWrapper = styled.div`
-  width: 600px;
-  height: 600px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(255, 255, 255, 0.4);
-  border-radius: 40px;
-  overflow: hidden;
 `;
 
 const Box = styled(motion.div)`
@@ -29,28 +18,17 @@ const Box = styled(motion.div)`
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2), 0 10px 20px rgba(0, 0, 0, 0.06);
 `;
 
-const boxVariants = {
-  hover: { rotateZ: 90 },
-  click: { scale: 1, borderRadius: "100px" },
-};
-
 function App() {
-  const boxWrapperRef = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(0);
+  const rotateZ = useTransform(x, [-963, 960], [-360, 360]);
+  useEffect(() => {
+    // scale.on("change", () => console.log(x.get()));
+    rotateZ.on("change", () => console.log(rotateZ.get()));
+  }, [x]);
 
   return (
     <Wrapper>
-      <BoxWrapper ref={boxWrapperRef}>
-        <Box
-          drag
-          dragConstraints={boxWrapperRef}
-          dragSnapToOrigin
-          dragElastic={0.5}
-          variants={boxVariants}
-          whileHover="hover"
-          whileDrag="drag"
-          whileTap="click"
-        ></Box>
-      </BoxWrapper>
+      <Box drag="x" dragSnapToOrigin style={{ x, rotateZ }}></Box>
     </Wrapper>
   );
 }
