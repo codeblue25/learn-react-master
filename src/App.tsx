@@ -12,70 +12,71 @@ const Wrapper = styled(motion.div)`
 `;
 
 const Box = styled(motion.div)`
-  position: absolute;
-  top: 100px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 300px;
-  height: 120px;
+  height: 200px;
   background-color: #fff;
   border-radius: 16px;
   font-size: 28px;
 `;
 
-const boxVariants = {
-  entry: (isBack: boolean) => ({
-    x: isBack ? -500 : 500,
-    opacity: 0,
-    scale: 0,
-  }),
-  visible: {
-    x: 0,
-    opacity: 1,
-    scale: 1,
-    transition: {
-      duration: 0.3,
-    },
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  div:first-child,
+  div:last-child {
+    grid-column: span 2;
+  }
+  gap: 10px;
+  width: 50vw;
+`;
+
+const Overlay = styled(motion.div)`
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+`;
+
+const overlayVariants = {
+  gettingDark: {
+    backgroundColor: "rgba(0, 0, 0, 0)",
   },
-  exit: (isBack: boolean) => ({
-    x: isBack ? 500 : -500,
-    opacity: 0,
-    scale: 0,
-    transition: {
-      duration: 0.3,
-    },
-  }),
+  gettingBright: {
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  exit: {
+    backgroundColor: "rgba(0, 0, 0, 0)",
+  },
 };
 
 function App() {
-  const [visible, setVisible] = useState(1);
-  const [isBack, setIsBack] = useState(false);
-  const showPrev = () => {
-    setIsBack(true);
-    setVisible((prev) => (prev === 1 ? 1 : prev - 1));
-  };
-  const showNext = () => {
-    setIsBack(false);
-    setVisible((prev) => (prev === 10 ? 10 : prev + 1));
+  const [isClicked, setIsClicked] = useState(false);
+  const toggleOverlay = () => {
+    setIsClicked((prev) => !prev);
   };
 
   return (
-    <Wrapper>
-      <AnimatePresence mode="wait">
-        <Box
-          key={visible}
-          variants={boxVariants}
-          initial="entry"
-          animate="visible"
-          exit="exit"
-          custom={isBack}
-        >
-          {visible}
-        </Box>
+    <Wrapper onClick={toggleOverlay}>
+      <Grid>
+        <Box layoutId="hello" />
+        <Box />
+        <Box />
+        <Box />
+      </Grid>
+
+      <AnimatePresence>
+        {isClicked ? (
+          <Overlay
+            variants={overlayVariants}
+            initial="gettingDark"
+            animate="gettingBright"
+            exit="exit"
+          >
+            <Box layoutId="hello" style={{ width: 400, height: 200 }} />
+          </Overlay>
+        ) : null}
       </AnimatePresence>
-      <button onClick={showPrev}>Show Prev</button>
-      <button onClick={showNext}>Show Next</button>
     </Wrapper>
   );
 }
