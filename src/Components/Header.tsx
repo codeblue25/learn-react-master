@@ -1,6 +1,6 @@
 import { Link, useRouteMatch } from "react-router-dom";
 import styled from "styled-components";
-import { motion } from "framer-motion";
+import { motion, useAnimation } from "framer-motion";
 import { useState } from "react";
 
 const Nav = styled.nav`
@@ -97,7 +97,15 @@ function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
   const homeMatch = useRouteMatch("/");
   const tvMatch = useRouteMatch("/tv");
-  const toggleSearch = () => setSearchOpen((prev) => !prev);
+  const inputAnimation = useAnimation();
+  const toggleSearch = () => {
+    if (searchOpen) {
+      inputAnimation.start({ scaleX: 0 });
+    } else {
+      inputAnimation.start({ scaleX: 1 });
+    }
+    setSearchOpen((prev) => !prev);
+  };
 
   return (
     <Nav>
@@ -146,7 +154,8 @@ function Header() {
           </motion.svg>
 
           <Input
-            animate={{ scaleX: searchOpen ? 1 : 0 }}
+            initial={{ scaleX: 0 }}
+            animate={inputAnimation}
             transition={{ ease: "linear" }}
             placeholder="Search for TV show"
           />
