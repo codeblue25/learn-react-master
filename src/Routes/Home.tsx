@@ -7,6 +7,7 @@ import { useState } from "react";
 
 const Wrapper = styled.div`
   background-color: #000;
+  padding-bottom: 200px;
 `;
 
 const Loader = styled.div`
@@ -51,11 +52,12 @@ const Row = styled(motion.div)`
   width: 100%;
 `;
 
-const Box = styled(motion.div)`
+const Box = styled(motion.div)<{ bgPhoto: string }>`
   height: 200px;
   font-size: 24px;
   color: #000;
-  background-color: #fff;
+  background-image: url(${(props) => props.bgPhoto});
+  background-size: cover;
 `;
 
 const rowVariants = {
@@ -70,15 +72,18 @@ function Home() {
     getMovies
   );
   const [index, setIndex] = useState(0);
-  const increaseIndex = () => {
-    if (leaving) return;
-    setLeaving(true);
-    setIndex((prev) => prev + 1);
-  };
   const [leaving, setLeaving] = useState(false);
-  const toggleLeaving = () => {
-    setLeaving((prev) => !prev);
+  const offset = 6;
+  const increaseIndex = () => {
+    if (data) {
+      if (leaving) return;
+      toggleLeaving();
+      const totalMovies = data?.results.length - 1;
+      const maxIndex = Math.floor(totalMovies / offset) - 1;
+      setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
+    }
   };
+  const toggleLeaving = () => setLeaving((prev) => !prev);
 
   return (
     <Wrapper>
@@ -102,11 +107,17 @@ function Home() {
                 initial="hidden"
                 animate="visible"
                 exit="exit"
-                transition={{ type: "tween", duration: 2 }}
+                transition={{ type: "tween", duration: 1 }}
               >
-                {[1, 2, 3, 4, 5, 6].map((i) => (
-                  <Box key={i}>{i}</Box>
-                ))}
+                {data?.results
+                  .slice(1)
+                  .slice(offset * index, offset * index + offset)
+                  .map((movie) => (
+                    <Box
+                      key={movie.id}
+                      bgPhoto={makeImagePath(movie.backdrop_path, "w500")}
+                    />
+                  ))}
               </Row>
             </AnimatePresence>
           </Slider>
