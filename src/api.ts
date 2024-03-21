@@ -1,4 +1,4 @@
-const API_KEY = "d01483cfdf1d7e31860cc087fa98c08f";
+const API_KEY = process.env.REACT_APP_API_KEY;
 const BASE_PATH = "https://api.themoviedb.org/3";
 
 interface IMovie {
