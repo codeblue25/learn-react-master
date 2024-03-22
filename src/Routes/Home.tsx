@@ -87,14 +87,23 @@ const Info = styled(motion.div)`
 `;
 
 const DetailBox = styled(motion.div)`
-  position: absolute;
-  top: 0;
+  position: fixed;
+  top: 100px;
   left: 0;
   right: 0;
   margin: 0 auto;
   width: 40vw;
   height: 80vh;
   background-color: skyblue;
+`;
+
+const Overlay = styled(motion.div)`
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
 `;
 
 const RankSvg = styled.svg`
@@ -156,6 +165,9 @@ function Home() {
   const toggleLeaving = () => setLeaving((prev) => !prev);
   const onBoxClicked = (movieId: number) => {
     history.push(`/movie/${movieId}`);
+  };
+  const onOverlayClick = () => {
+    history.push(`/`);
   };
 
   return (
@@ -227,7 +239,14 @@ function Home() {
 
           <AnimatePresence>
             {selectedMovieMatch ? (
-              <DetailBox layoutId={selectedMovieMatch.params.movieId} />
+              <>
+                <Overlay
+                  onClick={onOverlayClick}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                />
+                <DetailBox layoutId={selectedMovieMatch.params.movieId} />
+              </>
             ) : null}
           </AnimatePresence>
         </>
