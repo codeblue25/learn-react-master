@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { makeImagePath } from "../utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
+import { useHistory, useRouteMatch } from "react-router-dom";
 
 const Wrapper = styled.div`
   background-color: #000;
@@ -58,6 +59,7 @@ const Box = styled(motion.div)<{ bgPhoto: string }>`
   color: #000;
   background-image: url(${(props) => props.bgPhoto});
   background-size: cover;
+  cursor: pointer;
   &:first-child {
     transform-origin: center left;
   }
@@ -82,6 +84,17 @@ const Info = styled(motion.div)`
   span {
     font-size: 16px;
   }
+`;
+
+const DetailBox = styled(motion.div)`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: 40vw;
+  height: 80vh;
+  background-color: skyblue;
 `;
 
 const RankSvg = styled.svg`
@@ -120,6 +133,10 @@ const infoVariants = {
 };
 
 function Home() {
+  const history = useHistory();
+  const selectedMovieMatch = useRouteMatch<{ movieId: string }>(
+    "/movie/:movieId"
+  );
   const { data, isLoading } = useQuery<IMovieResult>(
     ["movies", "nowPlaying"],
     getMovies
@@ -137,6 +154,9 @@ function Home() {
     }
   };
   const toggleLeaving = () => setLeaving((prev) => !prev);
+  const onBoxClicked = (movieId: number) => {
+    history.push(`/movie/${movieId}`);
+  };
 
   return (
     <Wrapper>
@@ -167,12 +187,14 @@ function Home() {
                   .slice(offset * index, offset * index + offset)
                   .map((movie) => (
                     <Box
+                      layoutId={movie.id + ""}
                       key={movie.id}
                       bgPhoto={makeImagePath(movie.backdrop_path, "w500")}
                       variants={boxVariants}
                       initial="normal"
                       whileHover="hover"
                       transition={{ type: "tween" }}
+                      onClick={() => onBoxClicked(movie.id)}
                     >
                       <Info variants={infoVariants}>
                         <h4>{movie.title}</h4>
@@ -202,6 +224,12 @@ function Home() {
               </Row>
             </AnimatePresence>
           </Slider>
+
+          <AnimatePresence>
+            {selectedMovieMatch ? (
+              <DetailBox layoutId={selectedMovieMatch.params.movieId} />
+            ) : null}
+          </AnimatePresence>
         </>
       )}
     </Wrapper>
