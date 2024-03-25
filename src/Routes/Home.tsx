@@ -94,7 +94,32 @@ const DetailBox = styled(motion.div)`
   margin: 0 auto;
   width: 40vw;
   height: 80vh;
-  background-color: skyblue;
+  border-radius: 16px;
+  overflow: hidden;
+  background-color: ${(props) => props.theme.black.lighter};
+`;
+
+const DetailCover = styled.div`
+  width: 100%;
+  height: 400px;
+  background-size: cover;
+  background-position: center center;
+`;
+
+const DetailTitle = styled.h2`
+  position: relative;
+  top: -80px;
+  margin-left: 32px;
+  font-size: 42px;
+  color: ${(props) => props.theme.white.lighter};
+`;
+
+const DetailOverview = styled.p`
+  position: relative;
+  top: -40px;
+  padding: 32px;
+  font-size: 20px;
+  color: ${(props) => props.theme.white.lighter};
 `;
 
 const Overlay = styled(motion.div)`
@@ -169,6 +194,11 @@ function Home() {
   const onOverlayClick = () => {
     history.push(`/`);
   };
+  const clickedMovie =
+    selectedMovieMatch?.params.movieId &&
+    data?.results.find(
+      (movie) => movie.id === +selectedMovieMatch.params.movieId
+    );
 
   return (
     <Wrapper>
@@ -245,7 +275,20 @@ function Home() {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                 />
-                <DetailBox layoutId={selectedMovieMatch.params.movieId} />
+                <DetailBox layoutId={selectedMovieMatch.params.movieId}>
+                  {clickedMovie && (
+                    <>
+                      <DetailCover
+                        style={{
+                          backgroundImage: `linear-gradient(to top, black, transparent), url(
+                            ${makeImagePath(clickedMovie.backdrop_path)}`,
+                        }}
+                      />
+                      <DetailTitle>{clickedMovie.title}</DetailTitle>
+                      <DetailOverview>{clickedMovie.overview}</DetailOverview>
+                    </>
+                  )}
+                </DetailBox>
               </>
             ) : null}
           </AnimatePresence>
