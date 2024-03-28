@@ -1,25 +1,12 @@
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Home from "./Routes/Home";
-import Tvshow from "./Routes/Tvshow";
-import Search from "./Routes/Search";
 import Header from "./Components/Header";
+import { Outlet } from "react-router-dom";
 
 function App() {
   return (
-    <Router>
+    <div>
       <Header />
-      <Switch>
-        <Route path="/tv">
-          <Tvshow />
-        </Route>
-        <Route path="/search">
-          <Search />
-        </Route>
-        <Route path={["/", "/movie/:movieId"]}>
-          <Home />
-        </Route>
-      </Switch>
-    </Router>
+      <Outlet />
+    </div>
   );
 }
 

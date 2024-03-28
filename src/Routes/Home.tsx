@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { makeImagePath } from "../utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
-import { useHistory, useRouteMatch } from "react-router-dom";
+import { useNavigate, useMatch, PathMatch } from "react-router-dom";
 
 const Wrapper = styled.div`
   background-color: #000;
@@ -167,10 +167,9 @@ const infoVariants = {
 };
 
 function Home() {
-  const history = useHistory();
-  const selectedMovieMatch = useRouteMatch<{ movieId: string }>(
-    "/movie/:movieId"
-  );
+  const navigate = useNavigate();
+  const selectedMovieMatch: PathMatch<string> | null =
+    useMatch("/movie/:movieId");
   const { data, isLoading } = useQuery<IMovieResult>(
     ["movies", "nowPlaying"],
     getMovies
@@ -189,15 +188,15 @@ function Home() {
   };
   const toggleLeaving = () => setLeaving((prev) => !prev);
   const onBoxClicked = (movieId: number) => {
-    history.push(`/movie/${movieId}`);
+    navigate(`/movie/${movieId}`);
   };
   const onOverlayClick = () => {
-    history.push(`/`);
+    navigate(`/`);
   };
   const clickedMovie =
     selectedMovieMatch?.params.movieId &&
     data?.results.find(
-      (movie) => movie.id === +selectedMovieMatch.params.movieId
+      (movie) => movie.id === +selectedMovieMatch.params.movieId!
     );
 
   return (
