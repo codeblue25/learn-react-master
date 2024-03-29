@@ -1,5 +1,7 @@
 function Tvshow() {
-  return <h1>Tv show</h1>;
+  const users: any = [];
+
+  return <h1>{users[0].name}</h1>;
 }
 
 export default Tvshow;

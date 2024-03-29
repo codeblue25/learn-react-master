@@ -4,6 +4,8 @@ import App from "./App";
 import Home from "./Views/Home";
 import Tvshow from "./Views/Tvshow";
 import Search from "./Views/Search";
+import NotFound from "./Views/NotFound";
+import Error from "./Components/Error";
 
 const router = createBrowserRouter([
   {
@@ -21,12 +23,14 @@ const router = createBrowserRouter([
       {
         path: "tv",
         element: <Tvshow />,
+        errorElement: <Error />,
       },
       {
         path: "search",
         element: <Search />,
       },
     ],
+    errorElement: <NotFound />,
   },
 ]);
 
