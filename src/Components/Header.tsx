@@ -43,6 +43,7 @@ const Item = styled.li`
   color: ${(props) => props.theme.white.darker};
   transition: color 0.3s ease-in-out;
   &:hover {
+    cursor: pointer;
     color: ${(props) => props.theme.white.lighter};
   }
 `;
@@ -136,6 +137,9 @@ function Header() {
   const onValid = (data: IForm) => {
     navigate(`/search?keyword=${data.keyword}`);
   };
+  const onNavClick = (path: string) => {
+    navigate(path);
+  };
 
   return (
     <Nav variants={navVariants} initial="top" animate={navAnimation}>
@@ -153,13 +157,11 @@ function Header() {
         </Logo>
 
         <Items>
-          <Item>
-            <Link to="/">Home {homeMatch && <Circle layoutId="circle" />}</Link>
+          <Item onClick={() => onNavClick("/")}>
+            Home {homeMatch && <Circle layoutId="circle" />}
           </Item>
-          <Item>
-            <Link to="tv">
-              TV Shows {tvMatch && <Circle layoutId="circle" />}
-            </Link>
+          <Item onClick={() => onNavClick("tv")}>
+            TV Shows {tvMatch && <Circle layoutId="circle" />}
           </Item>
         </Items>
       </Col>
